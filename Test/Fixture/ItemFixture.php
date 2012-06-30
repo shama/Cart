@@ -29,6 +29,9 @@ class ItemFixture extends CakeTestFixture {
 			'name' => array('type'=>'string', 'null' => false, 'default' => NULL),
 			'price' => array('type'=>'float', 'null' => false, 'default' => NULL, 'length' => 8.2),
 			'active' => array('type'=>'boolean', 'null' => false, 'default' => 0),
+			'is_virtual' => array('type'=>'boolean', 'null' => false, 'default' => 0),
+			'max_quantity' => array('type'=>'integer', 'null' => false, 'default' => 0),
+			'min_quantity' => array('type'=>'integer', 'null' => false, 'default' => 0),
 			'indexes' => array(
 				'PRIMARY' => array('column' => 'id', 'unique' => 1))
 			);

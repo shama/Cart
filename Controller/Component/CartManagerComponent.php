@@ -40,7 +40,7 @@ class CartManagerComponent extends Component {
  * - sessionKey 
  * - useCookie 
  * - cookieName 
- * - afterBuyRedirect
+ * - afterAddItemRedirect
  *   - false to disable it
  *   - null to use the referer
  *   - string or array to set a redirect url
@@ -56,7 +56,7 @@ class CartManagerComponent extends Component {
 		'sessionKey' => 'Cart',
 		'useCookie' => false,
 		'cookieName' => 'Cart',
-		'afterBuyRedirect' => null,
+		'afterAddItemRedirect' => null,
 		'getBuy' => true,
 		'postBuy' => true);
 
@@ -105,7 +105,7 @@ class CartManagerComponent extends Component {
 			} else {
 				$this->Session->write($sessionKey, array(
 					'Cart' => array(),
-					'CartsItem'));
+					'CartsItem' => array()));
 			}
 		} else {
 			if ($userId && !$this->Session->check($sessionKey . '.Cart.id')) {
@@ -155,11 +155,11 @@ class CartManagerComponent extends Component {
 					$this->Controller->set('item', $item);
 					$this->Controller->render($buyAction);
 				} else {
-					$this->afterBuyRedirect($item);
+					$this->afterAddItemRedirect($item);
 				}
 			}
-			return $item;
 		}
+
 		return false;
 	}
 
@@ -183,17 +183,17 @@ class CartManagerComponent extends Component {
 	}
 
 /**
- * afterBuyRedirect
+ * afterAddItemRedirect
  *
  * @param array $item
  * @return vodi
  */
-	public function afterBuyRedirect($item) {
+	public function afterAddItemRedirect($item) {
 		extract($this->settings);
 		$this->Session->setFlash(__d('cart', 'You added %s to your cart', $item['name']));
-		if (is_string($afterBuyRedirect) || is_array($afterBuyRedirect)) {
-			$this->Controller->redirect($afterBuyRedirect);
-		} elseif (is_null($afterBuyRedirect)) {
+		if (is_string($afterAddItemRedirect) || is_array($afterAddItemRedirect)) {
+			$this->Controller->redirect($afterAddItemRedirect);
+		} elseif (is_null($afterAddItemRedirect)) {
 			$this->Controller->redirect($this->Controller->referer());
 		}
 	}
@@ -243,7 +243,8 @@ class CartManagerComponent extends Component {
 		if ($this->isLoggedIn) {
 			$data = $this->CartModel->addItem($this->cartId, $data);
 		}
-		$result = $this->CartSession->addItem($data);
+
+		$result = $this->CartSession->addItem($data['CartsItem']);
 		$this->calculateCart();
 		return $result;
 	}

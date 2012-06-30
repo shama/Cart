@@ -24,6 +24,18 @@ class CartSessionTestController extends Controller {
 
 class CartSessionComponentTest extends CakeTestCase {
 /**
+ * Fixtures
+ *
+ * @var array
+ */
+	public $fixtures = array(
+			'plugin.Cart.Cart',
+			'plugin.Cart.Item',
+			'plugin.Cart.Order',
+			'plugin.Cart.CartsItem',
+	);
+
+/**
  * setUp method
  *
  * @return void
@@ -43,6 +55,12 @@ class CartSessionComponentTest extends CakeTestCase {
 		parent::tearDown();
 		CakeSession::destroy();
 	}
+
+/**
+ * testWrite
+ *
+ * @return void
+ */
 
 	public function testWrite() {
 		$Cart = new CartSessionComponent($this->ComponentCollection);
