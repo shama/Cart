@@ -29,10 +29,10 @@ class CartSessionComponentTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-			'plugin.Cart.Cart',
-			'plugin.Cart.Item',
-			'plugin.Cart.Order',
-			'plugin.Cart.CartsItem',
+		'plugin.Cart.Cart',
+		'plugin.Cart.Item',
+		'plugin.Cart.Order',
+		'plugin.Cart.CartsItem',
 	);
 
 /**
@@ -41,7 +41,6 @@ class CartSessionComponentTest extends CakeTestCase {
  * @return void
  */
 	public function setUp() {
-		parent::setUp();
 		$_SESSION = null;
 		$this->ComponentCollection = new ComponentCollection();
 	}

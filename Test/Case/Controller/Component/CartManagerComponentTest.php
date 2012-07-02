@@ -3,6 +3,14 @@ App::uses('Controller', 'Controller');
 App::uses('CartManagerComponent', 'Cart.Controller/Component');
 App::uses('AuthComponent', 'Controller/Component');
 /**
+ * CartTestItemsController
+ *
+ */
+class CartTestItemsController extends Controller {
+	public $uses = array('Item');
+	public $modelClass = 'Item';
+}
+/**
  * Cart Manager Component Test
  * 
  * @author Florian Krämer
@@ -23,27 +31,30 @@ class CartManagerComponentTest extends CakeTestCase {
 	);
 
 /**
- * setUp
+ * startTest
  *
  * @return void
  */
-	public function setUp() {
+	public function startTest() {
 		$request = new CakeRequest(null, false);
-		$this->Controller = new Controller($request, $this->getMock('CakeResponse'));
+		$this->Controller = new CartTestItemsController($request, $this->getMock('CakeResponse'));
 
-		$collection = new ComponentCollection();
-		$collection->init($this->Controller);
+		$this->collection = new ComponentCollection();
+		$this->collection->init($this->Controller);
 
-		$this->CartManger = new CartManagerComponent($collection);
-		//$this->CartManager->Auth = $this->getMock('AuthComponent', array($collection));
+		$AuthMock = $this->getMock('AuthComponent', array(), array($this->collection));
+		$this->Controller->Auth = $AuthMock;
+
+		$this->CartManager = new CartManagerComponent($this->collection);
+		$this->CartManager->Auth = $AuthMock;
 	}
 
 /**
- * 
+ * endTest
  *
  * @return void
  */
-	public function tearDown() {
+	public function endTest() {
 		ClassRegistry::flush();
 		unset($this->CartManager);
 	}
@@ -54,7 +65,10 @@ class CartManagerComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testInitialize() {
-		$this->CartManger->initialize($this->Controller);
+		$this->CartManager->initialize($this->Controller, array());
+
+		$this->assertTrue(is_a($this->CartManager->CartModel, 'Cart'));
+		$this->assertEqual($this->CartManager->sessionKey, 'Cart');
 	}
 
 /**
@@ -63,7 +77,27 @@ class CartManagerComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testStartup() {
-		$this->CartManger->startup($this->Controller);
+		$this->collection = new ComponentCollection();
+		$this->collection->init($this->Controller);
+
+		$this->CartManager = $this->getMock('CartManagerComponent', array('captureBuy'), array($this->collection));
+		$this->CartManager->initialize($this->Controller, array());
+/*
+		$this->CartManager->expectAt(0, 'captureBuy', array());
+		$this->CartManager->setReturnValueAt(0, 'captureBuy', true);
+
+		$this->Controller->action = 'buy';
+		$this->CartManager->startup($this->Controller);
+*/
+	}
+
+/**
+ * testAddItem
+ *
+ * @return void
+ */
+	public function testAddItem() {
+		//$this->CartManager->addItem();
 	}
 
 /**
@@ -72,7 +106,15 @@ class CartManagerComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testPostBuy() {
-		$this->CartManger->postBuy();
+		$this->CartManager->initialize($this->Controller, array());
+		$this->assertFalse($this->CartManager->postBuy());
+
+		$this->Controller->response->expects($this->any())
+			->method('is')
+			->with('post')
+			->will($this->returnValue(true));
+
+		debug($this->CartManager->postBuy());
 	}
 
 /**
@@ -81,7 +123,8 @@ class CartManagerComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testGetBuy() {
-		$this->CartManger->getBuy();
+		$this->CartManager->initialize($this->Controller, array());
+		$this->assertFalse($this->CartManager->getBuy());
 	}
 
 }

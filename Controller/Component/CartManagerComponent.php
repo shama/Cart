@@ -53,6 +53,7 @@ class CartManagerComponent extends Component {
 		'model' => null,
 		'buyAction' => 'buy',
 		'cartModel' => 'Cart.Cart',
+		'cartSession' => array('CartSession', 'Cart.Controller/Component'),
 		'sessionKey' => 'Cart',
 		'useCookie' => false,
 		'cookieName' => 'Cart',
@@ -176,9 +177,11 @@ class CartManagerComponent extends Component {
 		if (!isset($data['CartsItem']['model'])) {
 			$data['CartsItem']['model'] = get_class($this->Controller->{$model});
 		}
+
 		if (empty($data['CartsItem']['quantity'])) {
 			$data['CartsItem']['quantity'] = 1;
 		}
+
 		return $data;
 	}
 
@@ -225,8 +228,7 @@ class CartManagerComponent extends Component {
  */
 	public function postBuy() {
 		if ($this->Controller->request->is('post')) {
-			$data = $this->Controller->request->data;
-			return $data;
+			return $this->Controller->request->data;
 		}
 		return false;
 	}
@@ -242,6 +244,9 @@ class CartManagerComponent extends Component {
 		$data = $this->Controller->{$model}->beforeAddToCart($data);
 		if ($this->isLoggedIn) {
 			$data = $this->CartModel->addItem($this->cartId, $data);
+			if ($data === false) {
+				return false;
+			}
 		}
 
 		$result = $this->CartSession->addItem($data['CartsItem']);
@@ -284,7 +289,7 @@ class CartManagerComponent extends Component {
 /**
  * Cart content
  *
- * 
+ * @return array
  */
 	public function content() {
 		$this->calculateCart();
@@ -298,7 +303,7 @@ class CartManagerComponent extends Component {
 		$sessionKey = $this->settings['sessionKey'];
 		$cartData = $this->CartModel->calculateCart($this->Session->read($sessionKey));
 		if ($this->isLoggedIn) {
-			//@todo save cart data here to db or in the model? :/
+			//@todo save cart data here to db or in the model?
 			//$this->CartModel->saveAll($cartData);
 		}
 		$this->Session->write($sessionKey, $cartData);

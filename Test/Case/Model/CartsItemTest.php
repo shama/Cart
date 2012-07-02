@@ -1,13 +1,13 @@
 <?php
-App::uses('Cart', 'Cart.Model');
+App::uses('CartsItem', 'Cart.Model');
 /**
- * Cart Test
+ * CartsItem Test
  * 
  * @author Florian Krämer
  * @copyright 2012 Florian Krämer
  * @license MIT
  */
-class CartTest extends CakeTestCase {
+class CartsItemTest extends CakeTestCase {
 /**
  * Fixtures
  *
@@ -26,7 +26,7 @@ class CartTest extends CakeTestCase {
  * @return void
  */
 	public function startTest() {
-		$this->Cart = ClassRegistry::init('Cart.Cart');
+		$this->CartsItem = ClassRegistry::init('Cart.CartsItem');
 	}
 
 /**
@@ -36,7 +36,7 @@ class CartTest extends CakeTestCase {
  */
 	public function endTest() {
 		ClassRegistry::flush();
-		unset($this->Model);
+		unset($this->Cart);
 	}
 
 /**
@@ -45,18 +45,7 @@ class CartTest extends CakeTestCase {
  * @return void
  */
 	public function testInstance() {
-		$this->assertTrue(is_a($this->Cart, 'Cart'));
-	}
-
-/**
- * 
- * 
- * @return void
- */
-	public function testAddItem() {
-		$this->Cart->cartId = 1;
-		$result = $this->Cart->addItem(1, array('CartsItem' => array()));
-		debug($result);
+		$this->assertTrue(is_a($this->CartsItem, 'CartsItem'));
 	}
 
 }

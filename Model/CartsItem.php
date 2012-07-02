@@ -30,19 +30,30 @@ class CartsItem extends CartAppModel {
  * @var array
  */
 	public $validate = array(
-		'name' => array(
+		'foreign_key' => array(
 			'required' => array(
 				'rule' => array('notEmpty'),
-				'required' => true, 'allowEmpty' => false,
-				'message' => 'Please enter a name for your cart.')),
-		/*	
-		'user_id' => array(
+				'required' => true,
+				'allowEmpty' => false)),
+		'foreign_key' => array(
 			'required' => array(
 				'rule' => array('notEmpty'),
-				'required' => true, 'allowEmpty' => false,
-				'message' => 'Please enter a username.'))
-		*/
+				'required' => true,
+				'allowEmpty' => false)),
+		'cart_id' => array(
+			'required' => array(
+				'rule' => array('notEmpty'),
+				'required' => true,
+				'allowEmpty' => false))
 	);
+
+/**
+ * 
+ */
+	public function validateItem($data) {
+		$this->set($data);
+		return $this->validates();
+	}
 
 	public function afterSave($created) {
 		

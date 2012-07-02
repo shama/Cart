@@ -115,10 +115,10 @@ class Cart extends CartAppModel {
 	}
 
 /**
- * 
+ * Adds and updates an item if it already exists in the cart
  *
- * @param string
- * @param array
+ * @param string $cartId
+ * @param array $itemData
  */
 	public function addItem($cartId, $itemData) {
 		$item = $this->CartsItem->find('first', array(
@@ -194,6 +194,8 @@ class Cart extends CartAppModel {
 	public function calculateCart($cartData = array()) {
 		if (isset($cartData['CartsItem'])) {
 			$cartData['Cart']['item_count'] = count($cartData['CartsItem']);
+		} else {
+			return $cartData['Cart']['total'] = 0.00;
 		}
 
 		$cart['Cart']['requires_shipping'] = 0;
@@ -269,6 +271,6 @@ class Cart extends CartAppModel {
  * 
  */
 	public function confirmCheckout($data) {
-		return (isset($data[]['confirm_checkout'] && $data[$this->alias]['confirm_checkout'] == 1));
+		return (isset($data[$this->alias]['confirm_checkout']) && $data[$this->alias]['confirm_checkout'] == 1);
 	}
 }
