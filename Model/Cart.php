@@ -41,7 +41,7 @@ class Cart extends CartAppModel {
 			'required' => array(
 				'rule' => array('notEmpty'),
 				'required' => true, 'allowEmpty' => false,
-				'message' => 'Please enter a name for your cart.')));
+				'message' => 'You have to add a user id.')));
 
 /**
  * Checks if a cart is active or not
@@ -86,7 +86,6 @@ class Cart extends CartAppModel {
 		$this->create();
 		$result = $this->save(array(
 			$this->alias => array(
-					
 				'user_id' => $userId,
 				'active' => 1,
 				'name' => __d('cart', 'My cart'))));
@@ -100,8 +99,8 @@ class Cart extends CartAppModel {
  */
 	public function view($cartId = null, $userId = null) {
 		$result = $this->find('first', array(
-				'conditions' => array(
-						$this->alias . '.user_id' => $userId)));
+			'conditions' => array(
+				$this->alias . '.user_id' => $userId)));
 
 		$this->create();
 		$result = $this->save(array(

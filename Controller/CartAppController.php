@@ -1,5 +1,5 @@
 <?php
-App::uses('CartAppController', 'Cart.Controller');
+App::uses('AppController', 'Controller');
 /**
  * Cart App Controller
  *
@@ -7,7 +7,7 @@ App::uses('CartAppController', 'Cart.Controller');
  * @copyright 2012 Florian Krämer
  * @license MIT
  */
-class CartAppController extends CartAppController {
+class CartAppController extends AppController {
 /**
  * Components
  *

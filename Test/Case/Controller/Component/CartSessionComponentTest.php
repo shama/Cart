@@ -65,29 +65,36 @@ class CartSessionComponentTest extends CakeTestCase {
 		$Cart = new CartSessionComponent($this->ComponentCollection);
 		$Cart->addItem(array(
 			'amount' => 10,
-			'model' => 'test',
-			'foreign_key' => 'test'));
-
-		$result = $Cart->read();
-		debug($result);
+			'model' => 'Item',
+			'foreign_key' => '1'));
 
 		$Cart->addItem(array(
 			'amount' => 1.21,
-			'model' => 'test',
-			'foreign_key' => 'test',
+			'model' => 'Item',
+			'foreign_key' => '2',
 			'foo' => 'bar'));
 
 		$result = $Cart->read();
-		debug($result);
+		$this->assertEqual($result['CartsItem'], array(
+			0 => array(
+				'amount' => 10,
+				'model' => 'Item',
+				'foreign_key' => '1'),
+			1 => array (
+				'amount' => 1.21,
+				'model' => 'Item',
+				'foreign_key' => '2',
+				'foo' => 'bar')));
 
 		$Cart->addItem(array(
-				'amount' => 2.21,
-				'model' => 'test',
-				'foreign_key' => 'test',
-				'foo' => 'bar'));
-		return;
+			'amount' => 2.21,
+			'model' => 'Item',
+			'foreign_key' => '2',
+			'foo' => 'bar'));
+
+
 		$result = $Cart->read();
-		debug($result);
+		debug($result['CartsItem']);
 
 
 		$Cart->removeItem('test', 'test');
@@ -95,7 +102,6 @@ class CartSessionComponentTest extends CakeTestCase {
 		$result = $Cart->read();
 		debug($result);
 
-		debug($Cart->calculateTotal());
 	}
 
 }

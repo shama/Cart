@@ -9,17 +9,37 @@ App::uses('PaymentApiException', 'Cart.Error');
  * @author Florian Krämer
  * @copyright 2012 Florian Krämer
  * @license MIT
- * @todo make it abstract?
  */
-class BasePaymentProcessor extends Object {
+abstract class BasePaymentProcessor extends Object {
 /**
  * Constructor
  *
  * @return void
  */
-	public function __construct() {
+	public function __construct($options = array()) {
 		$this->response = new CakeResponse();
 	}
+
+/**
+ * Callback Url
+ * 
+ * @var mixed array or string url, parseable by the Router
+ */
+	public $callbackUrl = array('admin' => false, 'plugin' => 'cart', 'controller' => 'cart', 'action' => 'callback');
+
+/**
+ * Return Url
+ *
+ * @var mixed array or string url, parseable by the Router
+ */
+	public $returnUrl = array('admin' => false, 'plugin' => 'cart', 'controller' => 'cart', 'action' => 'thank_you');
+
+/**
+ * Cancel Url
+ *
+ * @var mixed array or string url, parseable by the Router
+ */
+	public $cancelUrl = array('admin' => false, 'plugin' => 'cart', 'controller' => 'cart', 'action' => 'cancel_checkout');
 
 /**
  * Redirect
